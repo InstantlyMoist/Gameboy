@@ -1,0 +1,10 @@
+name: Gameboy
+main: me.kyllian.gameboy.GameboyPlugin
+author: Kyllian
+version: ${project.version}
+api-version: 1.13
+
+commands:
+  gameboy:
+    usage: /<command>
+    description: Base command of the plugin
