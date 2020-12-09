@@ -1,11 +1,9 @@
 package me.kyllian.gameboy.data;
 
 import me.kyllian.gameboy.GameboyPlugin;
-import me.kyllian.gameboy.tasks.MovementStopper;
-import me.kyllian.gameboy.tasks.OtherStopper;
+import me.kyllian.gameboy.helpers.ButtonToggleHelper;
 import nitrous.Cartridge;
 import nitrous.cpu.Emulator;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,8 +15,8 @@ import java.io.IOException;
 public class Pocket {
 
     private Emulator emulator;
-    private MovementStopper movementStopper;
-    private OtherStopper otherStopper;
+
+    private ButtonToggleHelper buttonToggleHelper;
 
     private ItemStack handItem = null;
 
@@ -28,20 +26,19 @@ public class Pocket {
         emulator.savefile = new File(plugin.getDataFolder(), "saves/" + player.getUniqueId() + "/" + cartridge.gameTitle + ".sav");
         createSavesFolder(plugin, player);
 
+        buttonToggleHelper = new ButtonToggleHelper(plugin, emulator);
+
         handItem = player.getInventory().getItemInMainHand();
 
         if (emulator.mmu.hasBattery()) {
             try {
                 emulator.mmu.load(new FileInputStream(emulator.savefile));
             } catch (IOException exception) {
-                // Do nothing
+                // Assume file either failed or doesn't exist.
             }
         }
 
         emulator.codeExecutionThread.start();
-
-        movementStopper = new MovementStopper(plugin, emulator);
-        otherStopper = new OtherStopper(plugin, emulator);
     }
 
     public void stopEmulator(Player player) {
@@ -58,8 +55,7 @@ public class Pocket {
 
         emulator.codeExecutionThread.stop();
 
-        movementStopper.cancel();
-        otherStopper.cancel();
+        buttonToggleHelper.cancel();
 
         emulator = null;
     }
@@ -77,11 +73,7 @@ public class Pocket {
         return emulator;
     }
 
-    public MovementStopper getMovementStopper() {
-        return movementStopper;
-    }
-
-    public OtherStopper getOtherStopper() {
-        return otherStopper;
+    public ButtonToggleHelper getButtonToggleHelper() {
+        return buttonToggleHelper;
     }
 }

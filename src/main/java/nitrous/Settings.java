@@ -83,26 +83,29 @@ public class Settings
 
     static
     {
-        // Load settings from storage.
-        channel1On = storage.getBoolean("channel1", true);
-        channel2On = storage.getBoolean("channel2", true);
-        channel3On = storage.getBoolean("channel3", true);
-        channel4On = storage.getBoolean("channel4", true);
-        muted = storage.getBoolean("muted", false);
-        volume = storage.getInt("volume", 100);
+        try {
+            channel1On = storage.getBoolean("channel1", true);
+            channel2On = storage.getBoolean("channel2", true);
+            channel3On = storage.getBoolean("channel3", true);
+            channel4On = storage.getBoolean("channel4", true);
+            muted = storage.getBoolean("muted", false);
+            volume = storage.getInt("volume", 100);
 
-        speed = getEnum("speed", EmulateSpeed.SINGLE);
-        interpolator = getEnum("interpolator", Interpolator.NEAREST);
+            speed = getEnum("speed", EmulateSpeed.SINGLE);
+            interpolator = getEnum("interpolator", Interpolator.NEAREST);
 
-        // Find the maximum possible magnification.
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int maxMag = Math.min(screen.width / R.W, screen.height / R.H);
+            // Find the maximum possible magnification.
+            Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+            int maxMag = Math.min(screen.width / R.W, screen.height / R.H);
 
-        // Cap the stored magnification with maximum possible.
-        magnification = Math.max(1, Math.min(maxMag, storage.getInt("magnification", 2)));
+            // Cap the stored magnification with maximum possible.
+            magnification = Math.max(1, Math.min(maxMag, storage.getInt("magnification", 2)));
 
-        // Load full screen setting.
-        fullScreen = storage.getBoolean("fullscreen", false);
+            // Load full screen setting.
+            fullScreen = storage.getBoolean("fullscreen", false);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**

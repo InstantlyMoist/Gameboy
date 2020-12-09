@@ -1,6 +1,7 @@
 package me.kyllian.gameboy.listeners;
 
 import me.kyllian.gameboy.GameboyPlugin;
+import me.kyllian.gameboy.data.Button;
 import me.kyllian.gameboy.data.Pocket;
 import nitrous.cpu.Emulator;
 import org.bukkit.Bukkit;
@@ -26,11 +27,14 @@ public class PlayerMoveListener implements Listener {
         if (pocket.isEmpty()) return;
         double diffX = event.getTo().getX() - event.getFrom().getX();
         double diffZ = event.getTo().getZ() - event.getFrom().getZ();
-        pocket.getEmulator().buttonLeft = diffX > 0.1;
+        pocket.getButtonToggleHelper().press(Button.BUTTONLEFT, diffX > 0.01);
+        pocket.getButtonToggleHelper().press(Button.BUTTONRIGHT, diffX < -0.01);
+        pocket.getButtonToggleHelper().press(Button.BUTTONUP, diffZ > 0.01);
+        pocket.getButtonToggleHelper().press(Button.BUTTONDOWN, diffZ < -0.01);
+        /*pocket.getEmulator().buttonLeft = diffX > 0.1;
         pocket.getEmulator().buttonRight = diffX < -0.1;
         pocket.getEmulator().buttonUp = diffZ > 0.1;
-        pocket.getEmulator().buttonDown = diffZ < -0.1;
-        pocket.getMovementStopper().update();
+        pocket.getEmulator().buttonDown = diffZ < -0.1;*/
         event.setTo(event.getFrom());
     }
 

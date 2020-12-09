@@ -667,7 +667,6 @@ public class Emulator
 
             if (System.nanoTime() - last > 1_000_000_000)
             {
-                System.err.println(last + " -- " + clockSpeed + " Hz -- " + (1.0 * cyclesExecutedThisSecond / clockSpeed));
                 last = System.nanoTime();
                 cyclesExecutedThisSecond = 0;
             }
