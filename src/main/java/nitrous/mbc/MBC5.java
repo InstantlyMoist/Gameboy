@@ -45,7 +45,7 @@ public class MBC5 extends MBC
     {
         addr &= 0xffff;
         byte data = (byte) (_data & 0xff);
-        switch (addr & 0xF000)
+        switch (addr & 0xE000)
         {
             case 0x0000:
             case 0x1000:

@@ -1,15 +1,21 @@
 package me.kyllian.gameboy;
 
 import me.kyllian.gameboy.commands.GameboyExecutor;
+import me.kyllian.gameboy.data.Pocket;
 import me.kyllian.gameboy.handlers.PlayerHandler;
 import me.kyllian.gameboy.handlers.RomHandler;
 import me.kyllian.gameboy.handlers.map.MapHandler;
 import me.kyllian.gameboy.handlers.map.MapHandlerFactory;
 import me.kyllian.gameboy.listeners.*;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.Callable;
+
 public class GameboyPlugin extends JavaPlugin {
+
+    private int gamesEmulated = 0;
 
     private MapHandler mapHandler;
     private PlayerHandler playerHandler;
@@ -26,7 +32,8 @@ public class GameboyPlugin extends JavaPlugin {
         playerHandler = new PlayerHandler(this);
         romHandler = new RomHandler(this);
 
-        new Metrics(this, 9592);
+        Metrics metrics = new Metrics(this, 9592);
+        metrics.addCustomChart(new Metrics.SingleLineChart("games_emulated", () -> gamesEmulated));
 
         mapHandler.loadData();
 
@@ -36,7 +43,18 @@ public class GameboyPlugin extends JavaPlugin {
         new PlayerInteractListener(this);
         new PlayerItemHeldListener(this);
         new PlayerMoveListener(this);
+        new PlayerQuitListener(this);
         new PlayerToggleSneakListener(this);
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            Pocket pocket = playerHandler.getPocket(player);
+            if (!pocket.isEmpty()) pocket.stopEmulator(player);
+        });
     }
 
     public MapHandler getMapHandler() {
@@ -49,5 +67,9 @@ public class GameboyPlugin extends JavaPlugin {
 
     public RomHandler getRomHandler() {
         return romHandler;
+    }
+
+    public void notifyEmulate() {
+        gamesEmulated++;
     }
 }

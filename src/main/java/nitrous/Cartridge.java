@@ -2,6 +2,7 @@ package nitrous;
 
 import nitrous.cpu.Emulator;
 import nitrous.mbc.*;
+import org.bukkit.Bukkit;
 
 import java.nio.charset.StandardCharsets;
 
@@ -11,44 +12,43 @@ import java.nio.charset.StandardCharsets;
  * @author Tudor
  * @author Quantum
  */
-public class Cartridge
-{
+public class Cartridge {
     /**
      * Mapping of cartridge type id to readable name.
      */
     // might be wrong!
     public static final String[] CARTRIDGE_TYPES = {
-    /* 0x00 */  "ROM ONLY",
-    /* 0x01 */  "ROM+MBC1",
-    /* 0x02 */  "ROM+MBC1+RAM",
-    /* 0x03 */  "ROM+MBC1+RAM+BATT",
-    /* 0x04 */  null,
-    /* 0x05 */  "ROM+MBC2",
-    /* 0x06 */  "ROM+MBC2+BATTERY",
-    /* 0x07 */  null,
-    /* 0x08 */  "ROM+RAM",
-    /* 0x09 */  "ROM+RAM+BATTERY",
-    /* 0x0a */  null,
-    /* 0x0b */  "ROM+MMM01",
-    /* 0x0c */  "ROM+MMM01+SRAM",
-    /* 0x0d */  "ROM+MMM01+SRAM+BATT",
-    /* 0x0e */  "ROM+MMM01+TIMER+BATT",
-    /* 0x0f */  "ROM+MBC3+TIMER+BATT",
-    /* 0x10 */  "ROM+MBC3+TIMER+RAM+BATT",
-    /* 0x11 */  "ROM+MBC3",
-    /* 0x12 */  "ROM+MBC3+RAM",
-    /* 0x13 */  "ROM+MBC3+RAM+BAT",
-    /* 0x14 */  null,
-    /* 0x15 */  null,
-    /* 0x16 */  null,
-    /* 0x17 */  null,
-    /* 0x18 */  null,
-    /* 0x19 */  "ROM+MBC5",
-    /* 0x1a */  "ROM+MBC5+RAM",
-    /* 0x1b */  "ROM+MBC5+RAM+BATT",
-    /* 0x1c */  "ROM+MBC5+RUMBLE",
-    /* 0x1d */  "ROM+MBC5+RUMBLE+SRAM",
-    /* 0x1e */  "ROM+MBC5+RUMBLE+SRAM+BATT",
+            /* 0x00 */  "ROM ONLY",
+            /* 0x01 */  "ROM+MBC1",
+            /* 0x02 */  "ROM+MBC1+RAM",
+            /* 0x03 */  "ROM+MBC1+RAM+BATT",
+            /* 0x04 */  null,
+            /* 0x05 */  "ROM+MBC2",
+            /* 0x06 */  "ROM+MBC2+BATTERY",
+            /* 0x07 */  null,
+            /* 0x08 */  "ROM+RAM",
+            /* 0x09 */  "ROM+RAM+BATTERY",
+            /* 0x0a */  null,
+            /* 0x0b */  "ROM+MMM01",
+            /* 0x0c */  "ROM+MMM01+SRAM",
+            /* 0x0d */  "ROM+MMM01+SRAM+BATT",
+            /* 0x0e */  "ROM+MMM01+TIMER+BATT",
+            /* 0x0f */  "ROM+MBC3+TIMER+BATT",
+            /* 0x10 */  "ROM+MBC3+TIMER+RAM+BATT",
+            /* 0x11 */  "ROM+MBC3",
+            /* 0x12 */  "ROM+MBC3+RAM",
+            /* 0x13 */  "ROM+MBC3+RAM+BAT",
+            /* 0x14 */  null,
+            /* 0x15 */  null,
+            /* 0x16 */  null,
+            /* 0x17 */  null,
+            /* 0x18 */  null,
+            /* 0x19 */  "ROM+MBC5",
+            /* 0x1a */  "ROM+MBC5+RAM",
+            /* 0x1b */  "ROM+MBC5+RAM+BATT",
+            /* 0x1c */  "ROM+MBC5+RUMBLE",
+            /* 0x1d */  "ROM+MBC5+RUMBLE+SRAM",
+            /* 0x1e */  "ROM+MBC5+RUMBLE+SRAM+BATT",
     };
 
     /**
@@ -101,8 +101,7 @@ public class Cartridge
      *
      * @param rom The raw ROM data to read from.
      */
-    public Cartridge(byte[] rom)
-    {
+    public Cartridge(byte[] rom) {
         this.rom = rom;
 
         /**
@@ -167,8 +166,7 @@ public class Cartridge
          * 54h - 1.5MByte (96 banks)
          */
         byte romSize = rom[0x0148];
-        switch (romSize)
-        {
+        switch (romSize) {
             case 52:
                 this.romBanks = 72;
                 break;
@@ -219,11 +217,9 @@ public class Cartridge
      *
      * @return Whether the cartridge contains a battery.
      */
-    public boolean hasBattery()
-    {
+    public boolean hasBattery() {
         // MMM01 not included here, but we don't support it anyway
-        switch (cartridgeType)
-        {
+        switch (cartridgeType) {
             case 0x03: // ROM+MBC1+RAM+BATT
             case 0x09: // ROM+RAM+BATTERY
             case 0x1B: // ROM+MBC5+RAM+BATT
@@ -244,12 +240,10 @@ public class Cartridge
      * @param core The Emulator to bind the controller to.
      * @return A Memory instance.
      */
-    public Memory createController(Emulator core)
-    {
+    public Memory createController(Emulator core) {
         // Look up which MBC should be used given the cartridge type
         // #object
-        switch (cartridgeType)
-        {
+        switch (cartridgeType) {
             case 0x00:
                 // Just ROM
                 return new Memory(core);
@@ -266,17 +260,17 @@ public class Cartridge
             case 0x13:
                 return new MBC3(core);
             case 0x1b:
+            case 0x19:
                 return new MBC5(core);
         }
-        throw new UnsupportedOperationException("unsupported controller " + CARTRIDGE_TYPES[cartridgeType]);
+        throw new UnsupportedOperationException("unsupported controller " + CARTRIDGE_TYPES[cartridgeType] + " type " + cartridgeType);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Cartridge{" +
                 "gameTitle='" + gameTitle + '\'' +
                 ", checksum=" + Integer.toHexString(checksum) +

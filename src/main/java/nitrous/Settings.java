@@ -1,9 +1,7 @@
 package nitrous;
 
-import nitrous.cpu.R;
 import nitrous.lcd.Interpolator;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.prefs.Preferences;
 
@@ -95,11 +93,11 @@ public class Settings
             interpolator = getEnum("interpolator", Interpolator.NEAREST);
 
             // Find the maximum possible magnification.
-            Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-            int maxMag = Math.min(screen.width / R.W, screen.height / R.H);
+            //Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+            //int maxMag = Math.min(screen.width / R.W, screen.height / R.H);
 
             // Cap the stored magnification with maximum possible.
-            magnification = Math.max(1, Math.min(maxMag, storage.getInt("magnification", 2)));
+            magnification = Math.max(1, Math.min(2, storage.getInt("magnification", 2)));
 
             // Load full screen setting.
             fullScreen = storage.getBoolean("fullscreen", false);
