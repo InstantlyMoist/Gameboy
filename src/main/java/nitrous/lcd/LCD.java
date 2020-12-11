@@ -14,6 +14,7 @@ import java.awt.peer.ComponentPeer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,8 @@ import static nitrous.cpu.R.*;
  * @author Quantum
  */
 public class LCD {
+
+
     /**
      * An array of blank values matching in size with the dimensions of screenBuffer, used to very quickly
      * clear the contents of the previous frame via {@link System#arraycopy}.
@@ -62,7 +65,7 @@ public class LCD {
      * priorities in internal code.
      */
     public final BufferedImage screenBuffer = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
-    public BufferedImage freeBufferFrame;
+    public BufferedImage freeBufferFrame = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
 
     /**
      * Background palettes. On CGB, 0-7 are used. On GB, only 0 is used.
@@ -118,6 +121,10 @@ public class LCD {
     public LCD(Emulator core) {
         this.core = core;
         initializePalettes();
+
+        Graphics2D graphics = freeBufferFrame.createGraphics();
+        graphics.setPaint(new Color(255,0,0));
+        graphics.fillRect(0,0, W,H);
     }
 
     /**

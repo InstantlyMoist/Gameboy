@@ -25,7 +25,7 @@ public class ButtonToggleHelper extends BukkitRunnable {
 
         buttonDebounce = plugin.getConfig().getInt("button_debounce");
 
-        runTaskTimer(plugin, 5,5);
+        runTaskTimerAsynchronously(plugin, 5,5);
     }
 
     public void press(Button button, Boolean state) {

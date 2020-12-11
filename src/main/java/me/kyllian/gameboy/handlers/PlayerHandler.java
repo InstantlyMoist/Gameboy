@@ -23,6 +23,7 @@ public class PlayerHandler {
 
     public void loadGame(Player player, Cartridge cartridge) {
         try {
+            plugin.notifyEmulate();
             getPocket(player).loadEmulator(plugin, cartridge, player);
             plugin.getMapHandler().sendMap(player);
             Location playerLocation = player.getLocation();
