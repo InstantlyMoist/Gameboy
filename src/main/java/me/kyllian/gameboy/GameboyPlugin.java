@@ -36,7 +36,11 @@ public class GameboyPlugin extends JavaPlugin {
         romHandler = new RomHandler(this);
 
         Metrics metrics = new Metrics(this, 9592);
-        metrics.addCustomChart(new Metrics.SingleLineChart("games_emulated", () -> gamesEmulated));
+        metrics.addCustomChart(new Metrics.SingleLineChart("games_emulated", () -> {
+            int copy = gamesEmulated;
+            gamesEmulated = 0; // Do this to get a better estimate of the games emulated within the last period of time.
+            return copy;
+        }));
         metrics.addCustomChart(new Metrics.AdvancedPie("games_installed", () -> {
             Map<String, Integer> values = new HashMap<>();
             romHandler.getRoms().keySet().forEach(romName -> {
