@@ -42,7 +42,7 @@ public class RomHandler {
             }
         })) {
             Cartridge cartridge = new Cartridge(Files.readAllBytes(rom.toPath()));
-            roms.put(cartridge.gameTitle, cartridge);
+            roms.put(roms.get(cartridge.gameTitle) != null ? cartridge.gameTitle + "_1" : cartridge.gameTitle, cartridge);
         }
     }
 

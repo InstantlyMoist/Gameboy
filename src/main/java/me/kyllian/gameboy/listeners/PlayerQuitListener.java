@@ -22,5 +22,6 @@ public class PlayerQuitListener implements Listener {
         Player player = event.getPlayer();
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (!pocket.isEmpty()) pocket.stopEmulator(player);
+        plugin.getPlayerHandler().removePocket(player);
     }
 }
