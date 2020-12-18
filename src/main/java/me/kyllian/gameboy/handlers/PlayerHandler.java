@@ -29,9 +29,9 @@ public class PlayerHandler {
             Location playerLocation = player.getLocation();
             playerLocation.setYaw(0);
             playerLocation.setPitch(40);
-            playerLocation.setX(playerLocation.getBlockX());
+            playerLocation.setX(playerLocation.getBlockX() + 0.5);
             playerLocation.setY(playerLocation.getBlockY());
-            playerLocation.setZ(playerLocation.getBlockZ());
+            playerLocation.setZ(playerLocation.getBlockZ() + 0.5);
             player.teleport(playerLocation);
         } catch (Exception exception) {
             exception.printStackTrace();

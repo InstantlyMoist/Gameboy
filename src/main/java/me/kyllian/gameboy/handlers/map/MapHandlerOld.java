@@ -96,7 +96,7 @@ public class MapHandlerOld implements MapHandler {
                 otherException.printStackTrace();
             }
         }
-        finalView.getRenderers().clear();
+        if (finalView.getRenderers() != null) finalView.getRenderers().clear();
 
         finalView.addRenderer(new MapRenderer() {
             Pocket pocket = plugin.getPlayerHandler().getPocket(player);

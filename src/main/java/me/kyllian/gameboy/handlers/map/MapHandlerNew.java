@@ -84,7 +84,7 @@ public class MapHandlerNew implements MapHandler {
         MapMeta mapMeta = (MapMeta) map.getItemMeta();
 
         MapView mapView = mapMeta.getMapView();
-        mapView.getRenderers().clear();
+        if (mapView.getRenderers() != null) mapView.getRenderers().clear();
 
         mapView.addRenderer(new MapRenderer() {
             Pocket pocket = plugin.getPlayerHandler().getPocket(player);
