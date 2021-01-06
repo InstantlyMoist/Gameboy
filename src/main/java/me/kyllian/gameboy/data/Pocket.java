@@ -3,6 +3,7 @@ package me.kyllian.gameboy.data;
 import me.kyllian.gameboy.GameboyPlugin;
 import me.kyllian.gameboy.helpers.ButtonToggleHelper;
 import nitrous.Cartridge;
+import nitrous.EmulateSpeed;
 import nitrous.cpu.Emulator;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

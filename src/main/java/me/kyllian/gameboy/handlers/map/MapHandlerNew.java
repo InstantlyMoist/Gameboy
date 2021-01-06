@@ -4,6 +4,9 @@ import me.kyllian.gameboy.GameboyPlugin;
 
 import me.kyllian.gameboy.data.Pocket;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.makers.FixedSizeThumbnailMaker;
+import net.coobird.thumbnailator.resizers.DefaultResizerFactory;
+import net.coobird.thumbnailator.resizers.Resizer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,6 +19,7 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -92,7 +96,9 @@ public class MapHandlerNew implements MapHandler {
             public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
                 if (pocket.getEmulator() == null) return;
                 try {
-                    BufferedImage scaled = Thumbnails.of(pocket.getEmulator().lcd.freeBufferFrame).size(128, 128).asBufferedImage();
+                    Resizer resizer = DefaultResizerFactory.getInstance().getResizer(new Dimension(160, 144), new Dimension(128, 128));
+                    BufferedImage scaled = new FixedSizeThumbnailMaker(128,128, true, true).resizer(resizer).make(pocket.getEmulator().lcd.freeBufferFrame);
+
                     mapCanvas.drawImage(0, 6, scaled);
                 } catch (Exception exception) {
                     exception.printStackTrace();
