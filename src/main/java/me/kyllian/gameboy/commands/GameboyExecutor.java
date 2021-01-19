@@ -62,7 +62,7 @@ public class GameboyExecutor implements CommandExecutor {
                 for (int i = 1; i != args.length; i++) {
                     gameName += args[i] + " ";
                 }
-                gameName = gameName.trim();
+                gameName = gameName.trim().toUpperCase();
                 Cartridge foundCartridge = plugin.getRomHandler().getRoms().get(gameName);
                 if (foundCartridge == null) {
                     sender.sendMessage(colorTranslate("&cGame not found!"));
