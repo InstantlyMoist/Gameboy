@@ -52,6 +52,7 @@ public class GameboyPlugin extends JavaPlugin {
         getCommand("gameboy").setExecutor(new GameboyExecutor(this));
 
         new PlayerDropItemListener(this);
+        new PlayerInteractEntityListener(this);
         new PlayerInteractListener(this);
         new PlayerItemHeldListener(this);
         new PlayerMoveListener(this);
