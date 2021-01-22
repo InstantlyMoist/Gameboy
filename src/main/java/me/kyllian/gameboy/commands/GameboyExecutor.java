@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import nitrous.Cartridge;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -83,10 +84,14 @@ public class GameboyExecutor implements CommandExecutor {
         plugin.getRomHandler().getRoms().keySet().forEach(rom -> {
             TextComponent romClick = new TextComponent(colorTranslate("\n&7" + rom));
             romClick.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gameboy play " + rom));
-            romClick.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(colorTranslate("&7Click here to play " + rom))));
+            try {
+                romClick.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(colorTranslate("&7Click here to play " + rom))));
+            } catch (NoClassDefFoundError ignored) {
+                // Hover not found, just don't add it
+            }
             component.addExtra(romClick);
         });
-        component.addExtra(colorTranslate("\n&7Type /gameboy play 'name' to play a game!\n&7Unsure how the plugin works? Join my discord: https://discord.gg/zgKr2YM"));
+        component.addExtra(colorTranslate("\n&7Type /gameboy play 'name' to play a game!\n&7Unsure how the plugin works? Join my discord: &7https://discord.gg/zgKr2YM"));
         sender.spigot().sendMessage(component);
         }
 
