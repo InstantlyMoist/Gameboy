@@ -119,7 +119,7 @@ public class Cartridge {
          *
          * // TODO: special uninitialized palette mode
          */
-        this.isColorGB = rom[0x0143] != 0;
+        this.isColorGB = rom[0x0143] < 0;
 
         /**
          * 0134-0143 - Title

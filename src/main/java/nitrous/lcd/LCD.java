@@ -156,6 +156,7 @@ public class LCD {
              * reading from it. (That is when the STAT register indicates Mode 3).
              * Note: Initially all background colors are initialized as white.
              */
+
             PaletteColors colors = PaletteColors.byHash[core.cartridge.checksum];
             bgPalettes[0] = new DMGPalette(this, colors.bg, R_BGP);
             spritePalettes[0] = new DMGPalette(this, colors.obj0, R_OBP0);
@@ -186,7 +187,7 @@ public class LCD {
      * @param i    The palette index being updated.
      * @param j    The byte index of the palette being updated.
      */
-    private void updatePaletteByte(byte[] from, IPalette to, int i, int j) {
+    private void updatePaletteByte(byte[] from, IPalette to, int i, int j) { ;
         /**
          * This register allows to read/write data to the CGBs Background Palette Memory, addressed through Register FF68.
          * Each color is defined by two bytes (Bit 0-7 in first byte).
