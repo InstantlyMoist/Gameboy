@@ -81,6 +81,10 @@ public class GameboyExecutor implements CommandExecutor {
 
     public void showHelp(CommandSender sender) {
         BaseComponent component = new TextComponent(colorTranslate("&7The current games you can play are: "));
+        if (plugin.getRomHandler().getRoms().isEmpty()) {
+            sender.sendMessage(colorTranslate("&7No games found!\n\n&7Need help installing them? Join my discord: &7https://discord.gg/zgKr2Y"));
+            return;
+        }
         plugin.getRomHandler().getRoms().keySet().forEach(rom -> {
             TextComponent romClick = new TextComponent(colorTranslate("\n&7" + rom));
             romClick.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gameboy play " + rom));
