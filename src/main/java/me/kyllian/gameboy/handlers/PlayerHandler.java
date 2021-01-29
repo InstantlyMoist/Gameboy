@@ -26,6 +26,7 @@ public class PlayerHandler {
             plugin.notifyEmulate();
             getPocket(player).loadEmulator(plugin, cartridge, player);
             plugin.getMapHandler().sendMap(player);
+            if (plugin.isProtocolLib()) return;
             Location playerLocation = player.getLocation();
             playerLocation.setYaw(0);
             playerLocation.setPitch(40);

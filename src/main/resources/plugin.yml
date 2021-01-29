@@ -3,8 +3,12 @@ main: me.kyllian.gameboy.GameboyPlugin
 author: Kyllian
 version: ${project.version}
 api-version: 1.13
+softdepend:
+  - ProtocolLib
 
 commands:
   gameboy:
     usage: /<command>
     description: Base command of the plugin
+    aliases:
+      - gb

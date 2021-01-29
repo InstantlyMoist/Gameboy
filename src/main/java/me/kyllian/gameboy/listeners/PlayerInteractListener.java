@@ -24,8 +24,8 @@ public class PlayerInteractListener implements Listener {
         Player player = event.getPlayer();
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (pocket.isEmpty()) return;
-        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) pocket.getButtonToggleHelper().press(Button.BUTTONA, true);
-        else pocket.getButtonToggleHelper().press(Button.BUTTONB, true);
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+            pocket.getButtonToggleHelper().press(Button.BUTTONB, true);
         event.setCancelled(true);
     }
 }

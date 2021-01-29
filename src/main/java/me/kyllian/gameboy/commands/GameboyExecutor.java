@@ -13,6 +13,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.awt.*;
@@ -40,7 +42,7 @@ public class GameboyExecutor implements CommandExecutor {
                     return true;
                 }
                 pocket.stopEmulator(player);
-                player.sendMessage(colorTranslate("&aStopped game succesfully"));
+                player.sendMessage(colorTranslate("&aStopped game successfully"));
                 return true;
             }
             if (args[0].equalsIgnoreCase("reload")) {
@@ -70,7 +72,16 @@ public class GameboyExecutor implements CommandExecutor {
                     showHelp(sender);
                     return true;
                 }
-                player.sendMessage(colorTranslate("&aNow playing: " + foundCartridge.gameTitle));
+                if (plugin.isProtocolLib()) {
+                    Entity entity = player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.ARROW);
+                    entity.addPassenger(player);
+                    entity.setSilent(true);
+                    entity.setInvulnerable(true);
+                    entity.setGravity(false);
+
+                    pocket.setArrow(entity);
+                }
+                player.sendMessage(colorTranslate("&aNow playing: " + foundCartridge.gameTitle + (plugin.isProtocolLib() ? "\n&aSneak to stop playing!" :"\n&aType /gameboy stop to stop playing!")));
                 plugin.getPlayerHandler().loadGame(player, foundCartridge);
                 return true;
             }
