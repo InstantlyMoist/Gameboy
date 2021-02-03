@@ -109,9 +109,13 @@ public class MapHandlerOld implements MapHandler {
                 if (pocket.getEmulator() == null) return;
                 try {
                     Resizer resizer = DefaultResizerFactory.getInstance().getResizer(new Dimension(160, 144), new Dimension(128, 128));
-                    BufferedImage scaled = new FixedSizeThumbnailMaker(128,128, true, true).resizer(resizer).make(pocket.getEmulator().lcd.freeBufferFrame);
-
-                    mapCanvas.drawImage(0, 6, scaled);
+                    BufferedImage scaled = new FixedSizeThumbnailMaker(128, 128, true, true).resizer(resizer).make(pocket.getEmulator().lcd.freeBufferFrame);
+                    BufferedImage newImage = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB);
+                    Graphics graphics = newImage.getGraphics();
+                    graphics.setColor(Color.white);
+                    graphics.fillRect(0, 0, 128, 128);
+                    graphics.drawImage(scaled, 0, 6, null);
+                    mapCanvas.drawImage(0, 0, newImage);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
