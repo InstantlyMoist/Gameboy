@@ -6,7 +6,7 @@
 
     <groupId>me.kyllian.gameboy</groupId>
     <artifactId>Gameboy</artifactId>
-    <version>1.09</version>
+    <version>1.10</version>
 
 
     <packaging>jar</packaging>
