@@ -23,10 +23,8 @@ public class RomHandler {
         this.plugin = plugin;
 
         romFolder = new File(plugin.getDataFolder(), "roms");
-        if (!romFolder.exists()) {
-            romFolder.mkdirs();
-            plugin.saveResource("roms/fbgb.gb", false);
-        }
+        if (!romFolder.exists()) romFolder.mkdirs();
+
 
         try {
             loadRoms();

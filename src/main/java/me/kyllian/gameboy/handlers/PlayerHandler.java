@@ -22,6 +22,7 @@ public class PlayerHandler {
     }
 
     public void loadGame(Player player, Cartridge cartridge) {
+        //TODO: First load animation (?)
         try {
             plugin.notifyEmulate();
             getPocket(player).loadEmulator(plugin, cartridge, player);
