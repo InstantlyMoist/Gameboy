@@ -30,7 +30,7 @@ public class GameboyExecutor implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(colorTranslate("&cThis command can only be run by players"));
+            sender.sendMessage(plugin.getMessageHandler().getMessage("player-only"));
             return true;
         }
         Player player = (Player) sender;
@@ -38,11 +38,11 @@ public class GameboyExecutor implements CommandExecutor {
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("stop")) {
                 if (pocket.isEmpty()) {
-                    player.sendMessage(colorTranslate("&cNo running game!"));
+                    player.sendMessage(plugin.getMessageHandler().getMessage("no-game"));
                     return true;
                 }
                 pocket.stopEmulator(player);
-                player.sendMessage(colorTranslate("&aStopped game successfully"));
+                player.sendMessage(plugin.getMessageHandler().getMessage("stopped"));
                 return true;
             }
             if (args[0].equalsIgnoreCase("reload")) {
@@ -58,7 +58,7 @@ public class GameboyExecutor implements CommandExecutor {
         if (args.length > 1) {
             if (args[0].equalsIgnoreCase("play")) {
                 if (!pocket.isEmpty()) {
-                    player.sendMessage(colorTranslate("&cAlready playing a game, stop by doing /gameboy stop"));
+                    player.sendMessage(plugin.getMessageHandler().getMessage("already-running"));
                     return true;
                 }
                 String gameName = "";
@@ -68,7 +68,7 @@ public class GameboyExecutor implements CommandExecutor {
                 gameName = gameName.trim().toUpperCase();
                 Cartridge foundCartridge = plugin.getRomHandler().getRoms().get(gameName);
                 if (foundCartridge == null) {
-                    sender.sendMessage(colorTranslate("&cGame not found!"));
+                    sender.sendMessage(plugin.getMessageHandler().getMessage("not-found"));
                     showHelp(sender);
                     return true;
                 }
@@ -81,7 +81,7 @@ public class GameboyExecutor implements CommandExecutor {
 
                     pocket.setArrow(entity);
                 }
-                player.sendMessage(colorTranslate("&aNow playing: " + foundCartridge.gameTitle + (plugin.isProtocolLib() ? "\n&aSneak to stop playing!" :"\n&aType /gameboy stop to stop playing!")));
+                player.sendMessage(plugin.getMessageHandler().getMessage(plugin.isProtocolLib() ? "now-playing-protocollib" : "now-playing-normal").replace("%gamename%", foundCartridge.gameTitle));
                 plugin.getPlayerHandler().loadGame(player, foundCartridge);
                 return true;
             }
@@ -91,22 +91,22 @@ public class GameboyExecutor implements CommandExecutor {
     }
 
     public void showHelp(CommandSender sender) {
-        BaseComponent component = new TextComponent(colorTranslate("&7The current games you can play are: "));
+        BaseComponent component = new TextComponent(plugin.getMessageHandler().getMessage("playable"));
         if (plugin.getRomHandler().getRoms().isEmpty()) {
-            sender.sendMessage(colorTranslate("&7No games found!\n\n&7Need help installing them? Join my discord: &7https://discord.gg/zgKr2Y"));
+            sender.sendMessage(plugin.getMessageHandler().getMessage("no-games"));
             return;
         }
         plugin.getRomHandler().getRoms().keySet().forEach(rom -> {
-            TextComponent romClick = new TextComponent(colorTranslate("\n&7" + rom));
+            TextComponent romClick = new TextComponent(colorTranslate("\n" + plugin.getMessageHandler().getMessage("gamename-prefix") + rom));
             romClick.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gameboy play " + rom));
             try {
-                romClick.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(colorTranslate("&7Click here to play " + rom))));
+                romClick.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(plugin.getMessageHandler().getMessage("click-to-play").replace("%gamename%", rom))));
             } catch (NoClassDefFoundError ignored) {
                 // Hover not found, just don't add it
             }
             component.addExtra(romClick);
         });
-        component.addExtra(colorTranslate("\n&7Type /gameboy play 'name' to play a game!\n&7Unsure how the plugin works? Join my discord: &7https://discord.gg/zgKr2YM"));
+        component.addExtra(plugin.getMessageHandler().getMessage("instructions"));
         sender.spigot().sendMessage(component);
         }
 

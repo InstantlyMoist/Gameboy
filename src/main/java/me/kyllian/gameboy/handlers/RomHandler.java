@@ -25,7 +25,6 @@ public class RomHandler {
         romFolder = new File(plugin.getDataFolder(), "roms");
         if (!romFolder.exists()) romFolder.mkdirs();
 
-
         try {
             loadRoms();
         } catch (IOException exception) {

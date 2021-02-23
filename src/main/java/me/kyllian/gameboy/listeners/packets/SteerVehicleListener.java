@@ -8,7 +8,6 @@ import com.comphenix.protocol.events.PacketEvent;
 import me.kyllian.gameboy.GameboyPlugin;
 import me.kyllian.gameboy.data.Button;
 import me.kyllian.gameboy.data.Pocket;
-import me.kyllian.gameboy.utils.ColorTranslate;
 import org.bukkit.entity.Player;
 
 public class SteerVehicleListener {
@@ -30,7 +29,7 @@ public class SteerVehicleListener {
                 pocket.getButtonToggleHelper().press(Button.BUTTONA, container.getBooleans().read(0));
                 if (container.getBooleans().read(1)) {
                     pocket.stopEmulator(player);
-                    player.sendMessage(ColorTranslate.colorTranslate("&aStopped game successfully"));
+                    player.sendMessage(gameboyPlugin.getMessageHandler().getMessage("stopped"));
                     return;
                 }
             }
