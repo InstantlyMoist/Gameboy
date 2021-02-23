@@ -2,6 +2,7 @@ package me.kyllian.gameboy;
 
 import me.kyllian.gameboy.commands.GameboyExecutor;
 import me.kyllian.gameboy.data.Pocket;
+import me.kyllian.gameboy.handlers.MessageHandler;
 import me.kyllian.gameboy.handlers.PlayerHandler;
 import me.kyllian.gameboy.handlers.RomHandler;
 import me.kyllian.gameboy.handlers.map.MapHandler;
@@ -22,6 +23,7 @@ public class GameboyPlugin extends JavaPlugin {
     private boolean protocolLib;
 
     private MapHandler mapHandler;
+    private MessageHandler messageHandler;
     private PlayerHandler playerHandler;
     private RomHandler romHandler;
 
@@ -35,6 +37,7 @@ public class GameboyPlugin extends JavaPlugin {
         saveDefaultConfig();
 
         mapHandler = new MapHandlerFactory(this).getMapHandler();
+        messageHandler = new MessageHandler(this);
         playerHandler = new PlayerHandler(this);
         romHandler = new RomHandler(this);
 
@@ -77,6 +80,10 @@ public class GameboyPlugin extends JavaPlugin {
 
     public MapHandler getMapHandler() {
         return mapHandler;
+    }
+
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
     }
 
     public PlayerHandler getPlayerHandler() {

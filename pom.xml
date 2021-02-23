@@ -6,7 +6,7 @@
 
     <groupId>me.kyllian.gameboy</groupId>
     <artifactId>Gameboy</artifactId>
-    <version>1.12</version>
+    <version>1.13</version>
 
 
     <packaging>jar</packaging>
@@ -17,10 +17,6 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
-                </includes>
             </resource>
         </resources>
         <plugins>
