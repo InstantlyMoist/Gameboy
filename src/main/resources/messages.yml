@@ -11,6 +11,7 @@ no-games:
   - "&7No games found!"
   - " "
   - "&7Need help installing them? Join my discord: &7https://discord.gg/zgKr2Y"
+no-permission: "&cYou don't have permission to do this!"
 not-found: "&cGame not found"
 now-playing-normal: "&aNow playing %gamename% type /gameboy stop to stop playing"
 now-playing-protocollib: "&aNow playing %gamename% sneak to stop playing!"

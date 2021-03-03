@@ -61,6 +61,10 @@ public class GameboyExecutor implements CommandExecutor {
                     player.sendMessage(plugin.getMessageHandler().getMessage("already-running"));
                     return true;
                 }
+                if (!player.hasPermission("gameboy.play")) {
+                    player.sendMessage(plugin.getMessageHandler().getMessage("no-permission"));
+                    return true;
+                }
                 String gameName = "";
                 for (int i = 1; i != args.length; i++) {
                     gameName += args[i] + " ";
