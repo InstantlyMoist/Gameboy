@@ -28,7 +28,7 @@ public class RomHandler {
         try {
             loadRoms();
         } catch (IOException exception) {
-            // TODO: Make this fail and throw a nice error
+            exception.printStackTrace();
         }
     }
 

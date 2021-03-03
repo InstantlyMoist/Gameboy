@@ -70,7 +70,6 @@ public class MapHandlerNew implements MapHandler {
             MapMeta meta = (MapMeta) map.getItemMeta();
             meta.setMapId((int) mapID.shortValue());
             map.setItemMeta(meta);
-            //map.setDurability(mapID.shortValue());
             mapsUsing.put(map, false);
         });
     }
