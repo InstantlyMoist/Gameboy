@@ -19,7 +19,7 @@ public class PlayerDropItemListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
+    public void on(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (!pocket.isEmpty())  {

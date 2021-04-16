@@ -21,7 +21,7 @@ public class PlayerMoveListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void on(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (pocket.isEmpty()) return;

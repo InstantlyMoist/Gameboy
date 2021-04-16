@@ -18,7 +18,7 @@ public class PlayerInteractEntityListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+    public void on(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (!pocket.isEmpty()) event.setCancelled(true);

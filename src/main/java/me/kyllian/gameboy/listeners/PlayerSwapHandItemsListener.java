@@ -19,7 +19,7 @@ public class PlayerSwapHandItemsListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+    public void on(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (pocket.isEmpty()) return;
