@@ -261,6 +261,7 @@ public class Cartridge {
                 return new MBC3(core);
             case 0x1b:
             case 0x19:
+            case 0x1E:
                 return new MBC5(core);
         }
         throw new UnsupportedOperationException("unsupported controller " + CARTRIDGE_TYPES[cartridgeType] + " type " + cartridgeType);
