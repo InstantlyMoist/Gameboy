@@ -10,6 +10,8 @@ import me.kyllian.gameboy.handlers.map.MapHandlerFactory;
 import me.kyllian.gameboy.listeners.*;
 import me.kyllian.gameboy.listeners.packets.SteerVehicleListener;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,16 +44,16 @@ public class GameboyPlugin extends JavaPlugin {
         romHandler = new RomHandler(this);
 
         Metrics metrics = new Metrics(this, 9592);
-        metrics.addCustomChart(new Metrics.SingleLineChart("games_emulated", () ->
+        metrics.addCustomChart(new SingleLineChart("games_emulated", () ->
                 gamesEmulated));
-        metrics.addCustomChart(new Metrics.AdvancedPie("games_installed", () -> {
+
+        metrics.addCustomChart(new AdvancedPie("games_installed", () -> {
             Map<String, Integer> values = new HashMap<>();
             romHandler.getRoms().keySet().forEach(romName -> {
                 values.put(romName, 1);
             });
             return values;
         }));
-
 
         mapHandler.loadData();
 

@@ -6,7 +6,7 @@
 
     <groupId>me.kyllian.gameboy</groupId>
     <artifactId>Gameboy</artifactId>
-    <version>1.14</version>
+    <version>1.17</version>
 
 
     <packaging>jar</packaging>
@@ -39,6 +39,16 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>javadoc/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -68,25 +78,25 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.2-R0.1-SNAPSHOT</version>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>1.7</version>
+            <version>3.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
-            <version>[0.4, 0.5)</version>
+            <version>0.4.19</version>
         </dependency>
         <!--ProtocolLib API-->
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.7.0</version>
+            <version>4.8.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
