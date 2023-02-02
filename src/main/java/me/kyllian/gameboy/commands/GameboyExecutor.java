@@ -1,5 +1,7 @@
 package me.kyllian.gameboy.commands;
 
+import eu.decentsoftware.holograms.api.DHAPI;
+import eu.decentsoftware.holograms.api.holograms.Hologram;
 import me.kyllian.gameboy.GameboyPlugin;
 import me.kyllian.gameboy.data.Pocket;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -19,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collections;
 
 public class GameboyExecutor implements CommandExecutor {
 
@@ -34,6 +37,7 @@ public class GameboyExecutor implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("stop")) {

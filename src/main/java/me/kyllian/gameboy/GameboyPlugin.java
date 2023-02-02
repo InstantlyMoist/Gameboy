@@ -1,5 +1,7 @@
 package me.kyllian.gameboy;
 
+import eu.decentsoftware.holograms.api.DHAPI;
+import eu.decentsoftware.holograms.api.holograms.Hologram;
 import me.kyllian.gameboy.commands.GameboyExecutor;
 import me.kyllian.gameboy.data.Pocket;
 import me.kyllian.gameboy.handlers.MessageHandler;
@@ -13,8 +15,10 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +32,8 @@ public class GameboyPlugin extends JavaPlugin {
     private MessageHandler messageHandler;
     private PlayerHandler playerHandler;
     private RomHandler romHandler;
+
+    public Hologram hologram;
 
     @Override
     public void onEnable() {
@@ -68,6 +74,13 @@ public class GameboyPlugin extends JavaPlugin {
         new PlayerSwapHandItemsListener(this);
 
         if (protocolLib) new SteerVehicleListener(this);
+
+        Location location = new Location(Bukkit.getWorld("world"), 10, 67 + 48, 16);
+        hologram = DHAPI.createHologram("gameboy", location);
+
+        for (int i = 0 ; i < 144; i++) {
+            DHAPI.addHologramLine(hologram, String.join("", Collections.nCopies(160, "█  ")));
+        }
     }
 
     @Override
