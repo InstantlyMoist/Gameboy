@@ -2,6 +2,8 @@
 #
 # For support: https://kyllian.nl/discord
 
-gameboys: 1000
+gameboys: 100
 
 button_debounce: 150
+
+tick_update_delay: 1

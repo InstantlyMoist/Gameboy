@@ -13,7 +13,10 @@ public class MapHandlerFactory {
 
     public MapHandler getMapHandler() {
         String minecraftVersion = Bukkit.getVersion();
-        int mainVer = Integer.parseInt(minecraftVersion.split("\\.")[1]);
+        String mainVerString = minecraftVersion.split("\\.")[1];
+        mainVerString = mainVerString.replace(")", "");
+        mainVerString = mainVerString.replace("(", "");
+        int mainVer = Integer.parseInt(mainVerString);
         return mainVer >= 13 ? new MapHandlerNew(plugin) : new MapHandlerOld(plugin);
     }
 }

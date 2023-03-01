@@ -2,10 +2,6 @@ package me.kyllian.gameboy.handlers.map;
 
 import me.kyllian.gameboy.GameboyPlugin;
 import me.kyllian.gameboy.data.Pocket;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.makers.FixedSizeThumbnailMaker;
-import net.coobird.thumbnailator.resizers.DefaultResizerFactory;
-import net.coobird.thumbnailator.resizers.Resizer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -28,10 +24,7 @@ import java.util.Map;
 
 public class MapHandlerOld implements MapHandler {
 
-    private GameboyPlugin plugin;
-
-    private File file;
-    private FileConfiguration fileConfiguration;
+    private final GameboyPlugin plugin;
 
     private Map<ItemStack, Boolean> mapsUsing;
 
@@ -42,9 +35,9 @@ public class MapHandlerOld implements MapHandler {
 
     public void loadData() {
         mapsUsing = new HashMap<>();
-        file = new File(plugin.getDataFolder(), "maps.yml");
+        File file = new File(plugin.getDataFolder(), "maps.yml");
         if (!file.exists()) plugin.saveResource("maps.yml", false);
-        fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         List<Integer> maps = fileConfiguration.getIntegerList("maps");
         int mapAmount = plugin.getConfig().getInt("gameboys");
         int currentMapAmount = maps.size();
@@ -85,42 +78,58 @@ public class MapHandlerOld implements MapHandler {
 
         mapsUsing.put(map, true);
 
-        MapView finalView = null;
+        MapView mapView = null;
         Class bukkitClass = null;
 
         try {
             bukkitClass = Class.forName("org.bukkit.Bukkit");
             Method getMapInt = bukkitClass.getMethod("getMap", int.class);
-            finalView = (MapView) getMapInt.invoke(bukkitClass, new Object[] {map.getDurability()});
+            mapView = (MapView) getMapInt.invoke(bukkitClass, new Object[] {map.getDurability()});
         } catch (Exception exception) {
             try {
                 Method getMapShort = bukkitClass.getMethod("getMap", short.class);
-                finalView = (MapView) getMapShort.invoke(bukkitClass, new Object[] {map.getDurability()});
+                mapView = (MapView) getMapShort.invoke(bukkitClass, new Object[] {map.getDurability()});
             } catch (Exception otherException) {
                 otherException.printStackTrace();
             }
         }
-        if (finalView.getRenderers() != null) finalView.getRenderers().clear();
+        if (mapView.getRenderers() != null) mapView.getRenderers().clear();
 
-        finalView.addRenderer(new MapRenderer() {
-            Pocket pocket = plugin.getPlayerHandler().getPocket(player);
+        MapRenderer renderer = new MapRenderer() {
+            final Pocket pocket = plugin.getPlayerHandler().getPocket(player);
+
             @Override
-            public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
-                if (pocket.getEmulator() == null) return;
-                try {
-                    Resizer resizer = DefaultResizerFactory.getInstance().getResizer(new Dimension(160, 144), new Dimension(128, 128));
-                    BufferedImage scaled = new FixedSizeThumbnailMaker(128, 128, true, true).resizer(resizer).make(pocket.getEmulator().lcd.freeBufferFrame);
-                    BufferedImage newImage = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB);
-                    Graphics graphics = newImage.getGraphics();
-                    graphics.setColor(Color.white);
-                    graphics.fillRect(0, 0, 128, 128);
-                    graphics.drawImage(scaled, 0, 6, null);
-                    mapCanvas.drawImage(0, 0, newImage);
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+            public void render(@NonNull MapView mapView, @NonNull MapCanvas mapCanvas, @NonNull Player player) {
+                int height = pocket.getEmulator().lcd.freeBufferArrayByte.length / 128;
+
+                byte[] pixels = pocket.getEmulator().lcd.freeBufferArrayByte.clone();
+
+                for (int x = 0; x < 128; x++) {
+                    for (int y = 0; y < height; y++) {
+                        mapCanvas.setPixel(x, y, pixels[x + (y * 128)]);
+                    }
                 }
             }
-        });
+        };
+
+        mapView.addRenderer(renderer);
+        MapView finalMapView = mapView;
+
+        int tickDelay = 1;
+        if (plugin.getConfig().get("tick_update_delay") != null) tickDelay = plugin.getConfig().getInt("tick_update_delay");
+        new BukkitRunnable() {
+            final Pocket pocket = plugin.getPlayerHandler().getPocket(player);
+            @Override
+            public void run() {
+                if (pocket.getEmulator() == null) {
+                    finalMapView.removeRenderer(renderer);
+                    cancel();
+                    return;
+                }
+                player.sendMap(finalMapView);
+            }
+        }.runTaskTimer(plugin, tickDelay, tickDelay);
+
         player.getInventory().setItemInMainHand(map);
     }
 

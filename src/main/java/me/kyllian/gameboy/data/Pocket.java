@@ -68,13 +68,19 @@ public class Pocket {
             e.printStackTrace();
         }
 
-        if (plugin.isProtocolLib()) arrow.remove();
-        arrow = null;
-
+        if (plugin.isProtocolLib()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    arrow.remove();
+                    arrow = null;
+                }
+            }.runTask(plugin);
+        }
         player.getInventory().setItemInMainHand(handItem);
         handItem = null;
 
-        emulator.codeExecutionThread.stop();
+        emulator.codeExecutionThread.interrupt();
 
         buttonToggleHelper.cancel();
 
