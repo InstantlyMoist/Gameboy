@@ -1,25 +1,18 @@
 package nitrous.lcd;
 
+import net.coobird.thumbnailator.makers.FixedSizeThumbnailMaker;
+import net.coobird.thumbnailator.makers.ThumbnailMaker;
+import net.coobird.thumbnailator.resizers.DefaultResizerFactory;
+import net.coobird.thumbnailator.resizers.Resizer;
 import nitrous.cpu.Emulator;
-import nitrous.cpu.R.*;
-import nitrous.Settings;
 import nitrous.mbc.Memory;
-import org.bukkit.Bukkit;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.awt.peer.ComponentPeer;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.Buffer;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import org.bukkit.map.MapPalette;
 
 import static nitrous.cpu.R.*;
 
@@ -66,6 +59,7 @@ public class LCD {
      */
     public final BufferedImage screenBuffer = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
     public BufferedImage freeBufferFrame = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
+    public byte[] freeBufferArrayByte = new byte[23040];
 
     /**
      * Background palettes. On CGB, 0-7 are used. On GB, only 0 is used.
@@ -335,13 +329,18 @@ public class LCD {
              * @{see http://bgb.bircd.org/pandocs.htm#lcdinterrupts}
              */
             if (LY == 143) {
-                core.setInterruptTriggered(VBLANK_BIT);
-                freeBufferFrame = copyImage(screenBuffer);
-                // Trigger LCDC if enabled
-                if ((lcdStat & LCD_STAT.VBLANK_MODE_BIT) != 0)
-                {
-                    core.setInterruptTriggered(LCDC_BIT);
+                this.core.setInterruptTriggered(1);
+                Resizer resizer = DefaultResizerFactory.getInstance().getResizer(new Dimension(160, 144), new Dimension(128, 128));
+                ThumbnailMaker thumbnailMaker = (new FixedSizeThumbnailMaker(128, 128, true, true)).resizer(resizer);
+                this.freeBufferFrame = thumbnailMaker.make(copyImage(this.screenBuffer));
+                for (int x = 0; x < this.freeBufferFrame.getWidth(); x++) {
+                    for (int y = 0; y < this.freeBufferFrame.getHeight(); y++) {
+                        Color color = new Color(this.freeBufferFrame.getRGB(x, y));
+                        this.freeBufferArrayByte[y * 128 + x] = MapPalette.matchColor(color);
+                    }
                 }
+                if ((lcdStat & 0x10) != 0)
+                    this.core.setInterruptTriggered(2);
             }
             // use 143 here as we've just finished processing line 143 and will start 144
         }
