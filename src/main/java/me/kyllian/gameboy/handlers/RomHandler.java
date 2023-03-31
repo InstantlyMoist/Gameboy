@@ -1,22 +1,21 @@
 package me.kyllian.gameboy.handlers;
 
 import me.kyllian.gameboy.GameboyPlugin;
-import nitrous.Cartridge;
+import org.bukkit.Bukkit;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RomHandler {
 
     private GameboyPlugin plugin;
 
-    private Map<String, Cartridge> roms;
+    private Map<String, String> roms;
     private File romFolder;
 
     public RomHandler(GameboyPlugin plugin) {
@@ -35,18 +34,14 @@ public class RomHandler {
     public void loadRoms() throws IOException {
         roms = new HashMap<>();
 
-        for (File rom : romFolder.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return (name.endsWith(".gb") || name.endsWith(".gbc"));
-            }
-        })) {
-            Cartridge cartridge = new Cartridge(Files.readAllBytes(rom.toPath()));
-            roms.put(roms.get(cartridge.gameTitle) != null ? cartridge.gameTitle + "_1" : cartridge.gameTitle, cartridge);
+        for (File rom : Objects.requireNonNull(romFolder.listFiles((dir, name) -> (name.endsWith(".gb") || name.endsWith(".gbc"))))) {
+            String path = rom.getAbsolutePath();
+            String name = rom.getName();
+            roms.put(name, path);
         }
     }
 
-    public Map<String, Cartridge> getRoms() {
+    public Map<String, String> getRoms() {
         return roms;
     }
 }

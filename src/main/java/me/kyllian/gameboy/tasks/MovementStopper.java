@@ -1,7 +1,7 @@
 package me.kyllian.gameboy.tasks;
 
+import eu.rekawek.coffeegb.gui.Emulator;
 import me.kyllian.gameboy.GameboyPlugin;
-import nitrous.cpu.Emulator;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MovementStopper extends BukkitRunnable {
@@ -18,10 +18,10 @@ public class MovementStopper extends BukkitRunnable {
     public void run() {
         if (emulator == null) cancel();
         if (System.currentTimeMillis() - lastUpdate > 100 && emulator != null) {
-            emulator.buttonUp = false;
-            emulator.buttonDown = false;
-            emulator.buttonLeft = false;
-            emulator.buttonRight = false;
+//            emulator.buttonUp = false;
+//            emulator.buttonDown = false;
+//            emulator.buttonLeft = false;
+//            emulator.buttonRight = false;
         }
     }
 

@@ -3,6 +3,7 @@ package me.kyllian.gameboy.handlers.map;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
+import eu.rekawek.coffeegb.gui.Emulator;
 import me.kyllian.gameboy.GameboyPlugin;
 
 import me.kyllian.gameboy.data.Pocket;
@@ -18,7 +19,6 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -102,14 +102,13 @@ public class MapHandlerNew implements MapHandler {
             final Pocket pocket = plugin.getPlayerHandler().getPocket(player);
 
             @Override
-            public void render(@NonNull MapView mapView, @NonNull MapCanvas mapCanvas, @NonNull Player player) {
-                int height = pocket.getEmulator().lcd.freeBufferArrayByte.length / 128;
+            public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
+                Emulator emulator = pocket.getEmulator();
 
-                byte[] pixels = pocket.getEmulator().lcd.freeBufferArrayByte.clone();
-
+                byte[] rgb = emulator.getDisplay().freeBufferArrayByte;
                 for (int x = 0; x < 128; x++) {
-                    for (int y = 0; y < height; y++) {
-                        mapCanvas.setPixel(x, y, pixels[x + (y * 128)]);
+                    for (int y = 0; y < 128; y++) {
+                        mapCanvas.setPixel(x, y, rgb[x + (y * 128)]);
                     }
                 }
             }

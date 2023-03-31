@@ -13,7 +13,6 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,16 +98,16 @@ public class MapHandlerOld implements MapHandler {
             final Pocket pocket = plugin.getPlayerHandler().getPocket(player);
 
             @Override
-            public void render(@NonNull MapView mapView, @NonNull MapCanvas mapCanvas, @NonNull Player player) {
-                int height = pocket.getEmulator().lcd.freeBufferArrayByte.length / 128;
-
-                byte[] pixels = pocket.getEmulator().lcd.freeBufferArrayByte.clone();
-
-                for (int x = 0; x < 128; x++) {
-                    for (int y = 0; y < height; y++) {
-                        mapCanvas.setPixel(x, y, pixels[x + (y * 128)]);
-                    }
-                }
+            public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
+//                int height = pocket.getEmulator().lcd.freeBufferArrayByte.length / 128;
+//
+//                byte[] pixels = pocket.getEmulator().lcd.freeBufferArrayByte.clone();
+//
+//                for (int x = 0; x < 128; x++) {
+//                    for (int y = 0; y < height; y++) {
+//                        mapCanvas.setPixel(x, y, pixels[x + (y * 128)]);
+//                    }
+//                }
             }
         };
 

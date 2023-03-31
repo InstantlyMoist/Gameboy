@@ -2,7 +2,6 @@ package me.kyllian.gameboy.handlers;
 
 import me.kyllian.gameboy.GameboyPlugin;
 import me.kyllian.gameboy.data.Pocket;
-import nitrous.Cartridge;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -21,11 +20,11 @@ public class PlayerHandler {
         pockets =  new HashMap<>();
     }
 
-    public void loadGame(Player player, Cartridge cartridge) {
+    public void loadGame(Player player, String gameFile) {
         //TODO: First load animation (?)
         try {
             plugin.notifyEmulate();
-            getPocket(player).loadEmulator(plugin, cartridge, player);
+            getPocket(player).loadEmulator(plugin, player, gameFile);
             plugin.getMapHandler().sendMap(player);
             if (plugin.isProtocolLib()) return;
             Location playerLocation = player.getLocation();

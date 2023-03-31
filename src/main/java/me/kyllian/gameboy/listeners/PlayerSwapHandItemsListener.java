@@ -1,7 +1,7 @@
 package me.kyllian.gameboy.listeners;
 
+import eu.rekawek.coffeegb.controller.ButtonListener;
 import me.kyllian.gameboy.GameboyPlugin;
-import me.kyllian.gameboy.data.Button;
 import me.kyllian.gameboy.data.Pocket;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,6 +24,6 @@ public class PlayerSwapHandItemsListener implements Listener {
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (pocket.isEmpty()) return;
         event.setCancelled(true);
-        pocket.getButtonToggleHelper().press(Button.BUTTONSTART, true);
+        pocket.getButtonToggleHelper().press(ButtonListener.Button.START, true);
     }
 }

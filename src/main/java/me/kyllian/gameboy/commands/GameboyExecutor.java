@@ -7,7 +7,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import nitrous.Cartridge;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -65,9 +64,10 @@ public class GameboyExecutor implements CommandExecutor {
                 for (int i = 1; i != args.length; i++) {
                     gameName += args[i] + " ";
                 }
-                gameName = gameName.trim().toUpperCase();
-                Cartridge foundCartridge = plugin.getRomHandler().getRoms().get(gameName);
-                if (foundCartridge == null) {
+                gameName = gameName.trim();
+                String foundPath = plugin.getRomHandler().getRoms().get(gameName);
+                Bukkit.getLogger().info("Found path: " + foundPath + "");
+                if (foundPath == null) {
                     sender.sendMessage(plugin.getMessageHandler().getMessage("not-found"));
                     showHelp(sender);
                     return true;
@@ -81,8 +81,8 @@ public class GameboyExecutor implements CommandExecutor {
 
                     pocket.setArrow(entity);
                 }
-                player.sendMessage(plugin.getMessageHandler().getMessage(plugin.isProtocolLib() ? "now-playing-protocollib" : "now-playing-normal").replace("%gamename%", foundCartridge.gameTitle));
-                plugin.getPlayerHandler().loadGame(player, foundCartridge);
+                player.sendMessage(plugin.getMessageHandler().getMessage(plugin.isProtocolLib() ? "now-playing-protocollib" : "now-playing-normal").replace("%gamename%",gameName));
+                plugin.getPlayerHandler().loadGame(player, foundPath);
                 return true;
             }
         }

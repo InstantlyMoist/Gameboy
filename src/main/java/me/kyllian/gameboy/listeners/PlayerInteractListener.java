@@ -1,7 +1,7 @@
 package me.kyllian.gameboy.listeners;
 
+import eu.rekawek.coffeegb.controller.ButtonListener;
 import me.kyllian.gameboy.GameboyPlugin;
-import me.kyllian.gameboy.data.Button;
 import me.kyllian.gameboy.data.Pocket;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,7 +25,8 @@ public class PlayerInteractListener implements Listener {
         Pocket pocket = plugin.getPlayerHandler().getPocket(player);
         if (pocket.isEmpty()) return;
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-            pocket.getButtonToggleHelper().press(Button.BUTTONB, true);
+            pocket.getButtonToggleHelper().press(ButtonListener.Button.B, true);
+
         event.setCancelled(true);
     }
 }

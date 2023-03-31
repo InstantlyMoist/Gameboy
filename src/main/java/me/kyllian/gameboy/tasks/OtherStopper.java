@@ -1,7 +1,7 @@
 package me.kyllian.gameboy.tasks;
 
+import eu.rekawek.coffeegb.gui.Emulator;
 import me.kyllian.gameboy.GameboyPlugin;
-import nitrous.cpu.Emulator;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class OtherStopper extends BukkitRunnable {
@@ -18,9 +18,9 @@ public class OtherStopper extends BukkitRunnable {
     public void run() {
         if (emulator == null) cancel();
         if (System.currentTimeMillis() - lastUpdate > 100 && emulator != null) {
-            emulator.buttonA = false;
-            emulator.buttonB = false;
-            emulator.buttonSelect = false;
+//            emulator.buttonA = false;
+//            emulator.buttonB = false;
+//            emulator.buttonSelect = false;
         }
     }
 
