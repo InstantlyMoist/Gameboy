@@ -19,18 +19,32 @@ public class SteerVehicleListener {
                 Player player = event.getPlayer();
                 Pocket pocket = gameboyPlugin.getPlayerHandler().getPocket(player);
                 if (pocket.isEmpty()) return;
-                PacketContainer container = event.getPacket();
-                float sideways = container.getFloat().read(0);
-                float forward = container.getFloat().read(1);
-                pocket.getButtonToggleHelper().press(Button.BUTTONLEFT, sideways > 0);
-                pocket.getButtonToggleHelper().press(Button.BUTTONRIGHT, sideways < 0);
-                pocket.getButtonToggleHelper().press(Button.BUTTONUP, forward > 0);
-                pocket.getButtonToggleHelper().press(Button.BUTTONDOWN, forward < 0);
-                pocket.getButtonToggleHelper().press(Button.BUTTONA, container.getBooleans().read(0));
-                if (container.getBooleans().read(1)) {
-                    pocket.stopEmulator(player);
-                    player.sendMessage(gameboyPlugin.getMessageHandler().getMessage("stopped"));
-                    return;
+                try {
+                    Object handle = event.getPacket().getHandle();
+
+                    Object input = handle.getClass().getMethod("input").invoke(handle);
+
+                    boolean forward  = (boolean) input.getClass().getMethod("forward").invoke(input);
+                    boolean backward = (boolean) input.getClass().getMethod("backward").invoke(input);
+                    boolean left     = (boolean) input.getClass().getMethod("left").invoke(input);
+                    boolean right    = (boolean) input.getClass().getMethod("right").invoke(input);
+                    boolean jump     = (boolean) input.getClass().getMethod("jump").invoke(input);
+                    boolean shift    = (boolean) input.getClass().getMethod("shift").invoke(input);
+                    boolean sprint   = (boolean) input.getClass().getMethod("sprint").invoke(input);
+
+                    pocket.getButtonToggleHelper().press(Button.BUTTONLEFT, left);
+                    pocket.getButtonToggleHelper().press(Button.BUTTONRIGHT, right);
+                    pocket.getButtonToggleHelper().press(Button.BUTTONUP, forward);
+                    pocket.getButtonToggleHelper().press(Button.BUTTONDOWN, backward);
+                    pocket.getButtonToggleHelper().press(Button.BUTTONA, jump);
+
+                    if (shift) {
+                        pocket.stopEmulator(player);
+                        player.sendMessage(gameboyPlugin.getMessageHandler().getMessage("stopped"));
+                        return;
+                    }
+                } catch (ReflectiveOperationException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
